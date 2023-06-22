@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler,MinMaxScaler
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
-lookback = 3
+lookback = 2
 datasets = pd.read_excel("D:\pythonProject\lib1\dataTur2200.xlsx", header=0)
 datasets.columns = [
     "surge",
@@ -31,7 +31,6 @@ heave = np.squeeze(heave)
 surge = np.squeeze(scaler1.fit_transform(surge.reshape(-1,1)))
 sway = np.squeeze(scaler1.fit_transform(sway.reshape(-1,1)))
 fairlead = scaler2.fit_transform(fairlead.reshape(-1,1))
-
 
 def create_dataset(heave, surge, sway, fairlead, lookback):
     X, y = [], []
@@ -56,15 +55,15 @@ print(X_train.shape, y_train.shape, len(heave))
 class Model_one(nn.Module):
     def __init__(self):
         super().__init__()
-        self.lstm = nn.LSTM(input_size=3, hidden_size=256, num_layers=1,batch_first = False)
+        self.lstm = nn.LSTM(input_size=3, hidden_size=256, num_layers=1,batch_first = True)
         self.relu = nn.ReLU()
         self.linear = nn.Linear(256, 1)
 
     def forward(self, x):
         x, _ = self.lstm(x)
+        x = self.linear(x)
         x = x[:, -1, :]
         x = self.relu(x)
-        x = self.linear(x)
         return x
 
 
@@ -75,7 +74,7 @@ loader = data.DataLoader(
     data.TensorDataset(X_train, y_train), shuffle=True, batch_size=10
 )
 
-n_epochs = 40
+n_epochs = 90
 for epoch in range(n_epochs):
     model.train()
     for X_batch, y_batch in loader:

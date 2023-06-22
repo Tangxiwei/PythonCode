@@ -11,7 +11,7 @@ from pylab import *
 lookback = 1
 hidden_size = 256
 cuda = torch.device('cuda')
-datasets = pd.read_excel("dataTur2200.xlsx", header=0)
+datasets = pd.read_excel("D:\datasets\dataTur2200.xlsx", header=0)
 datasets.columns = [
     "surge",
     "sway",
