@@ -111,8 +111,8 @@ loader = DataLoader(train_dataset, batch_size=10, shuffle=True)
 #             test_rmse = np.sqrt(criterion(y_pred_test.cpu(), y_test.cpu()))
 #         print(f"Epoch {epoch}: Train RMSE = {train_rmse:.4f}, Test RMSE = {test_rmse:.4f}, Loss = {loss:.4f}")
 # torch.save(model.state_dict(), 'model_weights_0545_EMD.pth')
-model = LSTMModel(input_size=6, hidden_size=256, output_size=8, num_layers=3, dropout_prob=0.5).to(device)
-model.load_state_dict(torch.load('model_weights_0545_EMD.pth'))
+# model = LSTMModel(input_size=6, hidden_size=256, output_size=8, num_layers=3, dropout_prob=0.5).to(device)
+# model.load_state_dict(torch.load('model_weights_0545_EMD.pth'))
 # 预测并反归一化
 model.eval()
 with torch.no_grad():

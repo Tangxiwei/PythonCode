@@ -91,9 +91,10 @@ with torch.no_grad():
     print(train_plot.shape,test_plot.shape)
     pred_plot = np.array(train_plot.tolist() + test_plot.tolist())
     # print(pred_plot.shape,origin_plot.shape)
-plt.ylim(500000,2500000)
-plt.plot(pred_plot[300:800])
-plt.plot(origin_plot[690:1190])
-plt.show()
-
+# plt.ylim(500000,2500000)
+# plt.plot(pred_plot[300:800])
+# plt.plot(origin_plot[690:1190])
+# plt.show()
+plt.figure(figsize= (60,45))
+ax1 = plt.subplot(2,1,1)
 
