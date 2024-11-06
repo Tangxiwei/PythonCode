@@ -6,7 +6,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
-
+from numpy.polynomial.polynomial import Polynomial
 # 设置设备为GPU（如果可用）
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(torch.cuda.is_available())
@@ -111,27 +111,27 @@ optimizer = optim.Adam(model.parameters(), lr=0.002)
 train_dataset = TensorDataset(X_train, y_train)
 loader = DataLoader(train_dataset, batch_size=10, shuffle=True)
 
-# 模型训练
-n_epochs = 45
-for epoch in range(n_epochs):
-    model.train()
-    for X_batch, y_batch in loader:
-        y_pred = model(X_batch).squeeze()
-        loss = criterion(y_pred, y_batch)
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-    # Validation
-    if epoch % 5 == 0:
-        model.eval()
-        with torch.no_grad():
-            y_pred_train = model(X_train).squeeze()
-            train_rmse = np.sqrt(criterion(y_pred_train.cpu(), y_train.cpu()))
-            y_pred_test = model(X_test).squeeze()
-            test_rmse = np.sqrt(criterion(y_pred_test.cpu(), y_test.cpu()))
-        print(f"Epoch {epoch}: Train RMSE = {train_rmse:.4f}, Test RMSE = {test_rmse:.4f}, Loss = {loss:.4f}")
-torch.save(model.state_dict(), 'model_weights_0545_ConvAutoencoderLSTM.pth')
-
+# # 模型训练
+# n_epochs = 45
+# for epoch in range(n_epochs):
+#     model.train()
+#     for X_batch, y_batch in loader:
+#         y_pred = model(X_batch).squeeze()
+#         loss = criterion(y_pred, y_batch)
+#         optimizer.zero_grad()
+#         loss.backward()
+#         optimizer.step()
+#     # Validation
+#     if epoch % 5 == 0:
+#         model.eval()
+#         with torch.no_grad():
+#             y_pred_train = model(X_train).squeeze()
+#             train_rmse = np.sqrt(criterion(y_pred_train.cpu(), y_train.cpu()))
+#             y_pred_test = model(X_test).squeeze()
+#             test_rmse = np.sqrt(criterion(y_pred_test.cpu(), y_test.cpu()))
+#         print(f"Epoch {epoch}: Train RMSE = {train_rmse:.4f}, Test RMSE = {test_rmse:.4f}, Loss = {loss:.4f}")
+# torch.save(model.state_dict(), 'model_weights_0545_ConvAutoencoderLSTM.pth')
+model.load_state_dict(torch.load('model_weights_0545_ConvAutoencoderLSTM.pth'))
 # 预测并反归一化
 model.eval()
 with torch.no_grad():
