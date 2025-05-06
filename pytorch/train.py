@@ -10,12 +10,12 @@ import matplotlib.pyplot as plt
 # 设置设备为GPU（如果可用）
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(torch.cuda.is_available())
-lookback = 6
+lookback = 8
 # 读取多个数据文件
-file_paths = ["D:/datasets/data0545.xlsx", "D:/datasets/data178131148.xlsx"]
+file_paths = ["D:/datasets/data0545.xlsx"]
 
 # 数据预处理和创建数据集
-def preprocess_data(file_path, truncation=8000, lookback=6):
+def preprocess_data(file_path, truncation=8000, lookback=8):
     datasets = pd.read_excel(file_path, header=0)
     datasets.columns = ["surge", "sway", "heave", "roll", "pitch", "yaw", "fairlead"]
     data_list = datasets.iloc[truncation:].to_numpy()
@@ -86,7 +86,7 @@ class ConvLSTMWithAttention(nn.Module):
         return x, attn_scores
 
 # 模型训练和预测
-def train_and_predict(X_train, X_test, y_train, y_test, scaler, y_test_original, file_index, n_epochs=45):
+def train_and_predict(X_train, X_test, y_train, y_test, scaler, y_test_original, file_index, n_epochs=40):
     input_size = X_train.shape[2]
     output_size = 1
     model = ConvLSTMWithAttention(input_size=input_size, hidden_size=256, output_size=output_size, num_layers=3, dropout_prob=0.5).to(device)
@@ -134,4 +134,4 @@ for i, file_path in enumerate(file_paths):
     X_train, X_test, y_train, y_test, scaler, y_test_original = preprocess_data(file_path)
     X_train, X_test = map(lambda x: torch.tensor(x, dtype=torch.float32).to(device), [X_train, X_test])
     y_train, y_test = map(lambda y: torch.tensor(y, dtype=torch.float32).to(device), [y_train, y_test])
-    train_and_predict(X_train, X_test, y_train, y_test, scaler, y_test_original, i + 1)
+    train_and_predict(X_train, X_test, y_train, y_test, scaler, y_test_original, i + 545)
